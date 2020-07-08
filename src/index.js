@@ -69,7 +69,7 @@ const COMMANDS = {
   },
   luckyTega: async (msg) => {
     const checkouters = await Checkouter.find();
-    const totalTegas = checkouters.reduce((acc, curr) => acc + curr, 0);
+    const totalTegas = checkouters.reduce((acc, curr) => acc + curr.tegaCount, 0);
     const checkoutersTotal = checkouters.length;
     const averageTegas = totalTegas / checkoutersTotal;
 
