@@ -69,7 +69,7 @@ const COMMANDS = {
   },
   tegaRank: async (msg) => {
     try {
-      const rank = await Checkouter.find();
+      const rank = await Checkouter.find().sort({ tegaCount: -1 });
       const rankMsg = rank.reduce((acc, checkouter, index) => {
         return (
           acc +
