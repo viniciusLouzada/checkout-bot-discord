@@ -62,7 +62,7 @@ const COMMANDS = {
         name: msg.member.displayName,
         discordId: msg.member.id,
       });
-      msg.reply("Usuário cadastrado com sucesso!!");
+      msg.reply("cadastrado(a) com sucesso!!");
     } catch (error) {
       msg.reply("Deu ruim na hora de cadastrar o usuário!");
     }
