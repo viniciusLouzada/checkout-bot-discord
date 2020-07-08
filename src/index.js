@@ -80,9 +80,12 @@ const COMMANDS = {
 
     const LUCKY_NUMBER = Math.random() * 100;
     const CHANCE = 5 * LUCKY_BALANCER;
-    msg.reply(
-      `DEBUG EM PROD:\ncheckoutersTotal:${checkoutersTotal}\ntotalTegas:${totalTegas}\nmessagingCheckouterTegaCount:${messagingCheckouterTegaCount}\nmessagingCheckouter:${messagingCheckouter}`
-    );
+
+    if (msg.content.includes("qual minha tegaChance?")) {
+      msg.reply(
+        `Sua chance é de ${CHANCE.toFixed(3)}%`
+      );
+    }
     
 
     if (LUCKY_NUMBER <= CHANCE) {
