@@ -21,23 +21,38 @@ const CHANNEL_IDS = {
 
 const CRONS = {
   fourTwenty: (ch) =>
-    createCronMsg(
-      ch,
-      "20 16 * * 1-5",
-      `<@&${ROLE_IDS.checkouter}> 4:20, hora do café do Thiagão!`
+    createCronMsg("20 16 * * 1-5", () =>
+      ch.send(`<@&${ROLE_IDS.checkouter}> 4:20, hora do café do Thiagão!`)
     ),
   daily: (ch) =>
-    createCronMsg(
-      ch,
-      "0 15 * * 1-5",
-      `<@&${ROLE_IDS.checkouter}> Partiu daily!!`
+    createCronMsg("0 15 * * 1-5", () =>
+      ch.send(`<@&${ROLE_IDS.checkouter}> Partiu daily!!`)
     ),
   pulses: (ch) =>
-    createCronMsg(
-      ch,
-      "* 10-19 * * 1",
-      `<@&${ROLE_IDS.checkouter}> Já respondeu o seu pulses hoje? https://www.pulses.com.br/app/engage/`
+    createCronMsg("* 10-19 * * 1", () =>
+      ch.send(
+        `<@&${ROLE_IDS.checkouter}> Já respondeu o seu pulses hoje? https://www.pulses.com.br/app/engage/`
+      )
     ),
+  luckyTega: (ch) => {
+    createCronMsg("* 10-19 * * 1-5", async () => {
+      if (Math.round(Math.random() * 100) <= 5) {
+        const checkouters = await Checkouter.find();
+        const checkoutersTotal = checkouters.length;
+        const luckyCheckouterIndex = Math.floor(
+          Math.random() * checkoutersTotal
+        );
+        const luckyCheckouter = await Checkouter.findOneAndUpdate(
+          { discordId: checkouters[luckyCheckouterIndex].discordId },
+          { $inc: { tegaCount: 1 } },
+          { new: true }
+        );
+        ch.send(
+          `<@${luckyCheckouter.discordId}> recebeu um TEGA da sorte aleatório, parabéns!!`
+        );
+      }
+    });
+  },
 };
 
 const COMMANDS = {
@@ -102,6 +117,7 @@ client.on("ready", async () => {
   CRONS.fourTwenty(resenhaChannel);
   CRONS.pulses(resenhaChannel);
   CRONS.daily(planningChannel);
+  CRONS.luckyTega(resenhaChannel);
 });
 
 client.on("message", async (msg) => {
@@ -120,11 +136,8 @@ client.on("message", async (msg) => {
 
 client.login(DISCORD_BOT_TOKEN);
 
-const createCronMsg = (ch, scheduled, msg) =>
-  cron.schedule(
-    scheduled,
-    () => {
-      ch.send(msg);
-    },
-    { scheduled: true, timezone: "America/Sao_Paulo" }
-  );
+const createCronMsg = (scheduled, cronFn) =>
+  cron.schedule(scheduled, cronFn, {
+    scheduled: true,
+    timezone: "America/Sao_Paulo",
+  });
