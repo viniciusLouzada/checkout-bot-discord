@@ -76,10 +76,14 @@ const COMMANDS = {
     const messagingCheckouter = checkouters.find(cktr => cktr.discordId === msg.member.id);
     const messagingCheckouterTegaCount = messagingCheckouter.tegaCount > 0 ? messagingCheckouter.tegaCount : 1;
 
-    const LUCKY_BALANCER = averageTegas/messagingCheckouterTegaCount;
+    const LUCKY_BALANCER = averageTegas / messagingCheckouterTegaCount;
 
-    const LUCKY_NUMBER = Math.round(Math.random() * 100);
+    const LUCKY_NUMBER = Math.random() * 100;
     const CHANCE = 5 * LUCKY_BALANCER;
+    msg.reply(
+      `DEBUG EM PROD:\ncheckoutersTotal:${checkoutersTotal}\ntotalTegas:${totalTegas}\nmessagingCheckouterTegaCount:${messagingCheckouterTegaCount}\nmessagingCheckouter:${messagingCheckouter}`
+    );
+    
 
     if (LUCKY_NUMBER <= CHANCE) {
       try {
@@ -97,11 +101,11 @@ const COMMANDS = {
       }
     } else if(LUCKY_NUMBER <= 5){
       msg.reply(
-        `Você QUASE foi premiada com o tega da sorte!\n\nsua chance é de ${CHANCE.toFixed(3)}% e o numero sorteado foi ${LUCKY_NUMBER.toFixed(3)}\n\n:aham:`
+        `Você QUASE foi premiada com o tega da sorte!\n\nsua chance é de ${CHANCE.toFixed(2)}% e o numero sorteado foi ${LUCKY_NUMBER.toFixed(3)}\n\n:aham:`
       );
     } else if(LUCKY_NUMBER <= 10){
       msg.reply(
-        `Ta sentindo o cheirinho?? tem ganhador chegando aqui!\n\nsua chance é de ${CHANCE.toFixed(3)}% e o numero sorteado foi ${LUCKY_NUMBER.toFixed(3)}\n\nIsso significa que o ganhador não foi você :genio:`
+        `Ta sentindo o cheirinho?? tem ganhador chegando aqui!\n\nsua chance é de ${CHANCE.toFixed(2)}% e o numero sorteado foi ${LUCKY_NUMBER.toFixed(3)}\n\nIsso significa que o ganhador não foi você :genio:`
       );
     }
   },
