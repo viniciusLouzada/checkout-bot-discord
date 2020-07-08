@@ -35,7 +35,7 @@ const CRONS = {
       )
     ),
   luckyTega: (ch) => {
-    createCronMsg("* 10-19 * * 1-5", async () => {
+    createCronMsg("0 10-19 * * 1-5", async () => {
       if (Math.round(Math.random() * 100) <= 5) {
         const checkouters = await Checkouter.find();
         const checkoutersTotal = checkouters.length;
