@@ -68,18 +68,41 @@ const COMMANDS = {
     }
   },
   luckyTega: async (msg) => {
-    try {
-      const checkouter = await Checkouter.findOneAndUpdate(
-        { discordId: msg.member.id },
-        { $inc: { tegaCount: 1 } },
-        { new: true }
-      );
+    const checkouters = await Checkouter.find();
+    const totalTegas = checkouters.reduce((acc, curr) => acc + curr, 0);
+    const checkoutersTotal = checkouters.length;
+    const averageTegas = totalTegas / checkoutersTotal;
 
+    const messagingCheckouter = checkouters.find(cktr => cktr.discordId === msg.member.id);
+    const messagingCheckouterTegaCount = messagingCheckouter.tegaCount > 0 ? messagingCheckouter.tegaCount : 1;
+
+    const LUCKY_BALANCER = averageTegas/messagingCheckouterTegaCount;
+
+    const LUCKY_NUMBER = Math.round(Math.random() * 100);
+    const CHANCE = 5 * LUCKY_BALANCER;
+
+    if (LUCKY_NUMBER <= CHANCE) {
+      try {
+        const checkouter = await Checkouter.findOneAndUpdate(
+          { discordId: msg.member.id },
+          { $inc: { tegaCount: 1 } },
+          { new: true }
+        );
+  
+        msg.reply(
+          `sua mensagem foi premiada com o tega da sorte! Agora vc tem ${checkouter.tegaCount} TEGAS!`
+        );
+      } catch (error) {
+        console.log("Error on adding lucky tega.", error);
+      }
+    } else if(LUCKY_NUMBER <= 5){
       msg.reply(
-        `sua mensagem foi premiada com o tega da sorte! Agora vc tem ${checkouter.tegaCount} TEGAS!`
+        `Você QUASE foi premiada com o tega da sorte!\n\nsua chance é de ${CHANCE.toFixed(3)}% e o numero sorteado foi ${LUCKY_NUMBER.toFixed(3)}\n\n:aham:`
       );
-    } catch (error) {
-      console.log("Error on adding lucky tega.", error);
+    } else if(LUCKY_NUMBER <= 10){
+      msg.reply(
+        `Ta sentindo o cheirinho?? tem ganhador chegando aqui!\n\nsua chance é de ${CHANCE.toFixed(3)}% e o numero sorteado foi ${LUCKY_NUMBER.toFixed(3)}\n\nIsso significa que o ganhador não foi você :genio:`
+      );
     }
   },
   tegaRank: async (msg) => {
@@ -121,17 +144,16 @@ client.on("ready", async () => {
 });
 
 client.on("message", async (msg) => {
-  if (
-    Math.round(Math.random() * 100) <= 5 &&
-    msg.member.roles.cache.has(ROLE_IDS.checkouter)
-  )
-    COMMANDS.luckyTega(msg);
-
   if (msg.content.includes("!cb")) {
     const code = msg.content.split(" ")[1];
     if (code === "register") COMMANDS.register(msg);
     if (code === "tegaRank") COMMANDS.tegaRank(msg);
   }
+
+  if (
+    msg.member.roles.cache.has(ROLE_IDS.checkouter)
+  )
+    COMMANDS.luckyTega(msg);
 });
 
 client.login(DISCORD_BOT_TOKEN);
