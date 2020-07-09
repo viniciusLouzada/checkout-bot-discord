@@ -68,7 +68,7 @@ const CRONS = {
         ch.send(
           "SORTEIO DE TEGA! - o primeiro a falar TEGA no chat irá ganha 1 tega!!! - VALENDOOOOO"
         ).then(() => {
-          ch.awaitMessages((response) => response === "TEGA", {
+          ch.awaitMessages((response) => response.content === "TEGA", {
             max: 1,
             time: 90000,
             errors: ["time"],
