@@ -20,12 +20,12 @@ const CHANNEL_IDS = {
 };
 
 const EMOJIS = {
-  alberto: client.emojis.cache.get("730474631433289741"),
-  stonks: client.emojis.cache.get("730474234198884443"),
-  dimba: client.emojis.cache.get("730473335607132302"),
-  genio: client.emojis.cache.get("730473982867931236"),
-  aham: client.emojis.cache.get("730474924975718440"),
-  enojado: client.emojis.cache.get("730485135295905855"),
+  alberto: () => client.emojis.cache.get("730474631433289741"),
+  stonks: () => client.emojis.cache.get("730474234198884443"),
+  dimba: () => client.emojis.cache.get("730473335607132302"),
+  genio: () => client.emojis.cache.get("730473982867931236"),
+  aham: () => client.emojis.cache.get("730474924975718440"),
+  enojado: () => client.emojis.cache.get("730485135295905855"),
 };
 
 const CRONS = {
@@ -80,12 +80,12 @@ const CRONS = {
                 { new: true }
               ).then(() => {
                 ch.send(
-                  `${collected.first().author} ganhou 1 TEGA! ${EMOJIS.dimba}`
+                  `${collected.first().author} ganhou 1 TEGA! ${EMOJIS.dimba()}`
                 );
               });
             })
             .catch((collected) => {
-              ch.send(`Deram mole, ninguém ganhou tega, ${EMOJIS.alberto}`);
+              ch.send(`Deram mole, ninguém ganhou tega, ${EMOJIS.alberto()}`);
             });
         });
       }
@@ -127,7 +127,7 @@ const COMMANDS = {
     const RARE_CASE = 0.01 * LUCKY_BALANCER;
 
     if (msg.content.includes("qual minha tegaChance?")) {
-      msg.reply(`Sua chance é de ${CHANCE.toFixed(3)}% ${EMOJIS.stonks}`);
+      msg.reply(`Sua chance é de ${CHANCE.toFixed(3)}% ${EMOJIS.stonks()}`);
     }
 
     // por faovr, se você ver esse código, não espalhe que tem esse caso especial com chance de 0.01%
@@ -168,9 +168,9 @@ const COMMANDS = {
       msg.reply(
         `Você QUASE foi premiada com o tega da sorte!\n\nsua chance é de ${CHANCE.toFixed(
           2
-        )}% e o numero sorteado foi ${LUCKY_NUMBER.toFixed(3)}\n\n ${
-          EMOJIS.enojado
-        }`
+        )}% e o numero sorteado foi ${LUCKY_NUMBER.toFixed(
+          3
+        )}\n\n ${EMOJIS.enojado()}`
       );
     } else if (LUCKY_NUMBER <= 10) {
       msg.reply(
@@ -178,7 +178,7 @@ const COMMANDS = {
           2
         )}% e o numero sorteado foi ${LUCKY_NUMBER.toFixed(
           3
-        )}\n\nIsso significa que o ganhador não foi você ${EMOJIS.genio}`
+        )}\n\nIsso significa que o ganhador não foi você ${EMOJIS.genio()}`
       );
     }
   },
