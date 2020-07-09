@@ -65,17 +65,17 @@ const CRONS = {
             errors: ["time"],
           })
             .then((collected) => {
-              await Checkouter.findOneAndUpdate(
+              Checkouter.findOneAndUpdate(
                 { discordId: collected.first().author.id },
                 { $inc: { tegaCount: 1 } },
                 { new: true }
-              );
-
-              ch.send(
-                `${collected.first().author} ganhou 1 TEGA! ${client.emojis.get(
-                  "730473335607132302"
-                )}`
-              );
+              ).then(() => {
+                ch.send(
+                  `${
+                    collected.first().author
+                  } ganhou 1 TEGA! ${client.emojis.get("730473335607132302")}`
+                );
+              });
             })
             .catch((collected) => {
               ch.send(
