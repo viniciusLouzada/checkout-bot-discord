@@ -221,6 +221,7 @@ client.on("ready", async () => {
   CRONS.pulses(resenhaChannel);
   CRONS.daily(planningChannel);
   CRONS.luckyTega(resenhaChannel);
+  CRONS.tegaAnswer(resenhaChannel);
 });
 
 client.on("message", async (msg) => {
