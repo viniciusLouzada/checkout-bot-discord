@@ -80,15 +80,31 @@ const COMMANDS = {
 
     const LUCKY_NUMBER = Math.random() * 100;
     const CHANCE = 5 * LUCKY_BALANCER;
+    const RARE_CASE = 0.01 * LUCKY_BALANCER;
 
     if (msg.content.includes("qual minha tegaChance?")) {
       msg.reply(
         `Sua chance é de ${CHANCE.toFixed(3)}%`
       );
     }
-    
-
-    if (LUCKY_NUMBER <= CHANCE) {
+  
+    // por faovr, se você ver esse código, não espalhe que tem esse caso especial com chance de 0.01%
+    // no dia que sair todos vamos rir bastante e comemorar :) prometo folga pra quem tirar... 
+    if (LUCKY_NUMBER <= RARE_CASE) {
+      try {
+        const checkouter = await Checkouter.findOneAndUpdate(
+          { discordId: msg.member.id },
+          { $inc: { tegaCount: 10 } },
+          { new: true }
+        );
+  
+        msg.reply(
+          `Sei que é difícil de acreditar, mas sua mensagem foi premiada com o FRUTO PROIBIDO do COSTÃO!\n\nAgora vc tem ${checkouter.tegaCount} TEGAS!\n\nSão 10 tegas a mais em uma porcentagem de ${RARE_CASE.toFixed(4)}%\n\nQUE BRABX!!!`
+        );
+      } catch (error) {
+        console.log("Error on adding lucky tega.", error);
+      }
+    } else if (LUCKY_NUMBER <= CHANCE) {
       try {
         const checkouter = await Checkouter.findOneAndUpdate(
           { discordId: msg.member.id },
