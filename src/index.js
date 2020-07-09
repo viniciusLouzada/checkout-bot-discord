@@ -21,22 +21,22 @@ const CHANNEL_IDS = {
 
 const CRONS = {
   fourTwenty: (ch) =>
-    createCronMsg("20 16 * * 1-5", () =>
+    createCron("20 16 * * 1-5", () =>
       ch.send(`<@&${ROLE_IDS.checkouter}> 4:20, hora do café do Thiagão!`)
     ),
   daily: (ch) =>
-    createCronMsg("0 15 * * 1-5", () =>
+    createCron("0 15 * * 1-5", () =>
       ch.send(`<@&${ROLE_IDS.checkouter}> Partiu daily!!`)
     ),
   pulses: (ch) =>
-    createCronMsg("* 10-19 * * 1", () =>
+    createCron("* 10-19 * * 1", () =>
       ch.send(
         `<@&${ROLE_IDS.checkouter}> Já respondeu o seu pulses hoje? https://www.pulses.com.br/app/engage/`
       )
     ),
   luckyTega: (ch) => {
-    createCronMsg("0 10-19 * * 1-5", async () => {
-      if (Math.round(Math.random() * 100) <= 5) {
+    createCron("0 10-19 * * 1-5", async () => {
+      if (Math.round(Math.random() * 100) <= 30) {
         const checkouters = await Checkouter.find();
         const checkoutersTotal = checkouters.length;
         const luckyCheckouterIndex = Math.floor(
@@ -50,6 +50,41 @@ const CRONS = {
         ch.send(
           `<@${luckyCheckouter.discordId}> recebeu um TEGA da sorte aleatório, parabéns!!`
         );
+      }
+    });
+  },
+  tegaAnswer: (ch) => {
+    createCron("*/15 10-19 * * 1-5", async () => {
+      if (Math.round(Math.random() * 100) <= 10) {
+        ch.send(
+          "SORTEIO DE TEGA! - o primeiro a falar TEGA no chat irá ganha 1 tega!!! - VALENDOOOOO"
+        ).then(() => {
+          ch.awaitMessages((response) => response === "TEGA", {
+            max: 1,
+            time: 90000,
+            errors: ["time"],
+          })
+            .then((collected) => {
+              await Checkouter.findOneAndUpdate(
+                { discordId: collected.first().author.id },
+                { $inc: { tegaCount: 1 } },
+                { new: true }
+              );
+
+              ch.send(
+                `${collected.first().author} ganhou 1 TEGA! ${client.emojis.get(
+                  "730473335607132302"
+                )}`
+              );
+            })
+            .catch((collected) => {
+              ch.send(
+                `Deram mole, ninguém ganhou tega, ${client.emojis.get(
+                  "730474631433289741"
+                )}`
+              );
+            });
+        });
       }
     });
   },
@@ -69,12 +104,18 @@ const COMMANDS = {
   },
   luckyTega: async (msg) => {
     const checkouters = await Checkouter.find();
-    const totalTegas = checkouters.reduce((acc, curr) => acc + curr.tegaCount, 0);
+    const totalTegas = checkouters.reduce(
+      (acc, curr) => acc + curr.tegaCount,
+      0
+    );
     const checkoutersTotal = checkouters.length;
     const averageTegas = totalTegas / checkoutersTotal;
 
-    const messagingCheckouter = checkouters.find(cktr => cktr.discordId === msg.member.id);
-    const messagingCheckouterTegaCount = messagingCheckouter.tegaCount > 0 ? messagingCheckouter.tegaCount : 1;
+    const messagingCheckouter = checkouters.find(
+      (cktr) => cktr.discordId === msg.member.id
+    );
+    const messagingCheckouterTegaCount =
+      messagingCheckouter.tegaCount > 0 ? messagingCheckouter.tegaCount : 1;
 
     const LUCKY_BALANCER = averageTegas / messagingCheckouterTegaCount;
 
@@ -84,12 +125,14 @@ const COMMANDS = {
 
     if (msg.content.includes("qual minha tegaChance?")) {
       msg.reply(
-        `Sua chance é de ${CHANCE.toFixed(3)}%`
+        `Sua chance é de ${CHANCE.toFixed(3)}% ${client.emojis.get(
+          "730474234198884443"
+        )}`
       );
     }
-  
+
     // por faovr, se você ver esse código, não espalhe que tem esse caso especial com chance de 0.01%
-    // no dia que sair todos vamos rir bastante e comemorar :) prometo folga pra quem tirar... 
+    // no dia que sair todos vamos rir bastante e comemorar :) prometo folga pra quem tirar...
     if (LUCKY_NUMBER <= RARE_CASE) {
       try {
         const checkouter = await Checkouter.findOneAndUpdate(
@@ -97,9 +140,13 @@ const COMMANDS = {
           { $inc: { tegaCount: 10 } },
           { new: true }
         );
-  
+
         msg.reply(
-          `Sei que é difícil de acreditar, mas sua mensagem foi premiada com o FRUTO PROIBIDO do COSTÃO!\n\nAgora vc tem ${checkouter.tegaCount} TEGAS!\n\nSão 10 tegas a mais em uma porcentagem de ${RARE_CASE.toFixed(4)}%\n\nQUE BRABX!!!`
+          `Sei que é difícil de acreditar, mas sua mensagem foi premiada com o FRUTO PROIBIDO do COSTÃO!\n\nAgora vc tem ${
+            checkouter.tegaCount
+          } TEGAS!\n\nSão 10 tegas a mais em uma porcentagem de ${RARE_CASE.toFixed(
+            4
+          )}%\n\nQUE BRABX!!!`
         );
       } catch (error) {
         console.log("Error on adding lucky tega.", error);
@@ -111,20 +158,30 @@ const COMMANDS = {
           { $inc: { tegaCount: 1 } },
           { new: true }
         );
-  
+
         msg.reply(
           `sua mensagem foi premiada com o tega da sorte! Agora vc tem ${checkouter.tegaCount} TEGAS!`
         );
       } catch (error) {
         console.log("Error on adding lucky tega.", error);
       }
-    } else if(LUCKY_NUMBER <= 5){
+    } else if (LUCKY_NUMBER <= 5) {
       msg.reply(
-        `Você QUASE foi premiada com o tega da sorte!\n\nsua chance é de ${CHANCE.toFixed(2)}% e o numero sorteado foi ${LUCKY_NUMBER.toFixed(3)}\n\n:aham:`
+        `Você QUASE foi premiada com o tega da sorte!\n\nsua chance é de ${CHANCE.toFixed(
+          2
+        )}% e o numero sorteado foi ${LUCKY_NUMBER.toFixed(
+          3
+        )}\n\n ${client.emojis.get("730474924975718440")}`
       );
-    } else if(LUCKY_NUMBER <= 10){
+    } else if (LUCKY_NUMBER <= 10) {
       msg.reply(
-        `Ta sentindo o cheirinho?? tem ganhador chegando aqui!\n\nsua chance é de ${CHANCE.toFixed(2)}% e o numero sorteado foi ${LUCKY_NUMBER.toFixed(3)}\n\nIsso significa que o ganhador não foi você :genio:`
+        `Ta sentindo o cheirinho?? tem ganhador chegando aqui!\n\nsua chance é de ${CHANCE.toFixed(
+          2
+        )}% e o numero sorteado foi ${LUCKY_NUMBER.toFixed(
+          3
+        )}\n\nIsso significa que o ganhador não foi você ${client.emojis.get(
+          "730473982867931236"
+        )}`
       );
     }
   },
@@ -173,15 +230,12 @@ client.on("message", async (msg) => {
     if (code === "tegaRank") COMMANDS.tegaRank(msg);
   }
 
-  if (
-    msg.member.roles.cache.has(ROLE_IDS.checkouter)
-  )
-    COMMANDS.luckyTega(msg);
+  if (msg.member.roles.cache.has(ROLE_IDS.checkouter)) COMMANDS.luckyTega(msg);
 });
 
 client.login(DISCORD_BOT_TOKEN);
 
-const createCronMsg = (scheduled, cronFn) =>
+const createCron = (scheduled, cronFn) =>
   cron.schedule(scheduled, cronFn, {
     scheduled: true,
     timezone: "America/Sao_Paulo",
