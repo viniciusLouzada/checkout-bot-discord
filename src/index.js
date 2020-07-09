@@ -19,6 +19,11 @@ const CHANNEL_IDS = {
   planning: "730141036655018104",
 };
 
+const EMOJIS = {
+  alberto: "",
+  stonks: "",
+};
+
 const CRONS = {
   fourTwenty: (ch) =>
     createCron("20 16 * * 1-5", () =>
@@ -73,13 +78,15 @@ const CRONS = {
                 ch.send(
                   `${
                     collected.first().author
-                  } ganhou 1 TEGA! ${client.emojis.get("730473335607132302")}`
+                  } ganhou 1 TEGA! ${client.emojis.cache.get(
+                    "730473335607132302"
+                  )}`
                 );
               });
             })
             .catch((collected) => {
               ch.send(
-                `Deram mole, ninguém ganhou tega, ${client.emojis.get(
+                `Deram mole, ninguém ganhou tega, ${client.emojis.cache.get(
                   "730474631433289741"
                 )}`
               );
@@ -125,7 +132,7 @@ const COMMANDS = {
 
     if (msg.content.includes("qual minha tegaChance?")) {
       msg.reply(
-        `Sua chance é de ${CHANCE.toFixed(3)}% ${client.emojis.get(
+        `Sua chance é de ${CHANCE.toFixed(3)}% ${client.emojis.cache.get(
           "730474234198884443"
         )}`
       );
@@ -171,7 +178,7 @@ const COMMANDS = {
           2
         )}% e o numero sorteado foi ${LUCKY_NUMBER.toFixed(
           3
-        )}\n\n ${client.emojis.get("730474924975718440")}`
+        )}\n\n ${client.emojis.cache.get("730474924975718440")}`
       );
     } else if (LUCKY_NUMBER <= 10) {
       msg.reply(
@@ -179,7 +186,7 @@ const COMMANDS = {
           2
         )}% e o numero sorteado foi ${LUCKY_NUMBER.toFixed(
           3
-        )}\n\nIsso significa que o ganhador não foi você ${client.emojis.get(
+        )}\n\nIsso significa que o ganhador não foi você ${client.emojis.cache.get(
           "730473982867931236"
         )}`
       );
