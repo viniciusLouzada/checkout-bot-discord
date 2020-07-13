@@ -38,7 +38,7 @@ const CRONS = {
       ch.send(`<@&${ROLE_IDS.checkouter}> Partiu daily!!`)
     ),
   pulses: (ch) =>
-    createCron("* 10-19 * * 1", () =>
+    createCron("*/60 10-19 * * 1", () =>
       ch.send(
         `<@&${ROLE_IDS.checkouter}> Já respondeu o seu pulses hoje? https://www.pulses.com.br/app/engage/`
       )
