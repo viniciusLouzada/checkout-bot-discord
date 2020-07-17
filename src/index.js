@@ -28,6 +28,8 @@ const EMOJIS = {
   enojado: () => client.emojis.cache.get("730485135295905855"),
 };
 
+let tegaRushMultiplier = 1;
+
 const CRONS = {
   fourTwenty: (ch) =>
     createCron("20 16 * * 1-5", () =>
@@ -45,7 +47,7 @@ const CRONS = {
     ),
   luckyTega: (ch) => {
     createCron("0 10-19 * * 1-5", async () => {
-      if (Math.round(Math.random() * 100) <= 30) {
+      if (Math.round(Math.random() * 100) <= 30 * tegaRushMultiplier) {
         const checkouters = await Checkouter.find();
         const checkoutersTotal = checkouters.length;
         const luckyCheckouterIndex = Math.floor(
@@ -64,7 +66,7 @@ const CRONS = {
   },
   tegaAnswer: (ch) => {
     createCron("*/15 10-19 * * 1-5", async () => {
-      if (Math.round(Math.random() * 100) <= 10) {
+      if (Math.round(Math.random() * 100) <= 10 * tegaRushMultiplier) {
         ch.send(
           "SORTEIO DE TEGA! - o primeiro a falar TEGA no chat irá ganha 1 tega!!! - VALENDOOOOO"
         ).then(() => {
@@ -89,6 +91,25 @@ const CRONS = {
             });
         });
       }
+    });
+  },
+  startFridayTegaRush: (ch) => {
+    createCron("0 12 * * Friday", async () => {
+      tegaRushMultiplier = 2;
+
+      ch.send(
+        `COMEÇOU O FRIDAY TEGA RUSH - Chances dobradas de Tegas em todos os métodos!!! SEM SPAM RAPEIZE ${EMOJIS.alberto}`
+      );
+    });
+  },
+
+  finishFridayTegaRush: (ch) => {
+    createCron("0 19 * * Friday", async () => {
+      tegaRushMultiplier = 1;
+
+      ch.send(
+        `ACABOU O FRIDAY TEGA RUSH - Será que alguém conseguiu aproveitar pra passar o Jesus? ${EMOJIS.enojado}`
+      );
     });
   },
 };
@@ -123,7 +144,7 @@ const COMMANDS = {
     const LUCKY_BALANCER = averageTegas / messagingCheckouterTegaCount;
 
     const LUCKY_NUMBER = Math.random() * 100;
-    const CHANCE = 5 * LUCKY_BALANCER;
+    const CHANCE = 5 * LUCKY_BALANCER * tegaRushMultiplier;
     const RARE_CASE = 0.01 * LUCKY_BALANCER;
 
     if (msg.content.includes("qual minha tegaChance?")) {
