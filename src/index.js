@@ -94,7 +94,7 @@ const CRONS = {
     });
   },
   startFridayTegaRush: (ch) => {
-    createCron("10 12 * * Friday", async () => {
+    createCron("0 10 * * Friday", async () => {
       tegaRushMultiplier = 2;
 
       ch.send(
