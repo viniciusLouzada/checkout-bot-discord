@@ -94,7 +94,7 @@ const CRONS = {
     });
   },
   startFridayTegaRush: (ch) => {
-    createCron("0 12 * * Friday", async () => {
+    createCron("10 12 * * Friday", async () => {
       tegaRushMultiplier = 2;
 
       ch.send(
@@ -240,6 +240,8 @@ client.on("ready", async () => {
   CRONS.daily(planningChannel);
   CRONS.luckyTega(resenhaChannel);
   CRONS.tegaAnswer(resenhaChannel);
+  CRONS.startFridayTegaRush(resenhaChannel);
+  CRONS.finishFridayTegaRush(resenhaChannel);
 });
 
 client.on("message", async (msg) => {
