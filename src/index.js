@@ -98,7 +98,7 @@ const CRONS = {
       tegaRushMultiplier = 2;
 
       ch.send(
-        `COMEÇOU O FRIDAY TEGA RUSH - Chances dobradas de Tegas em todos os métodos!!! SEM SPAM RAPEIZE ${EMOJIS.alberto}`
+        `COMEÇOU O FRIDAY TEGA RUSH - Chances dobradas de Tegas em todos os métodos!!! SEM SPAM RAPEIZE ${EMOJIS.alberto()}`
       );
     });
   },
@@ -108,7 +108,7 @@ const CRONS = {
       tegaRushMultiplier = 1;
 
       ch.send(
-        `ACABOU O FRIDAY TEGA RUSH - Será que alguém conseguiu aproveitar pra passar o Jesus? ${EMOJIS.enojado}`
+        `ACABOU O FRIDAY TEGA RUSH - Será que alguém conseguiu aproveitar pra passar o Jesus? ${EMOJIS.enojado()}`
       );
     });
   },
