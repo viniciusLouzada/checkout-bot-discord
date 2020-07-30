@@ -116,7 +116,7 @@ const CRONS = {
   },
 
   startThursdayUpperCase: (ch) => {
-    createCron("0 10 * * Thursday", async () => {
+    createCron("22 16 * * Thursday", async () => {
       isItBadLuckThursday = true
       ch.send(
         `E COMEEEEEÇA O THURSDAY UPPER CASE - SE NÃO FALAR GRITANDO VAI PERDER TEGA!!!!!!  ${EMOJIS.thidemo()}`
@@ -282,7 +282,7 @@ client.on("ready", async () => {
 })
 
 client.on("message", async (msg) => {
-  if (msg.toUpperCase().content.includes("!CB")) {
+  if (msg.content.toUpperCase().includes("!CB")) {
     const code = msg.content.split(" ")[1]
     if (code.toUpperCase() === "REGISTER") COMMANDS.register(msg)
     if (code.toUpperCase() === "TEGARANK") COMMANDS.tegaRank(msg)
