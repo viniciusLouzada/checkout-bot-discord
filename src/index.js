@@ -116,7 +116,7 @@ const CRONS = {
   },
 
   startThursdayUpperCase: (ch) => {
-    createCron("22 16 * * Thursday", async () => {
+    createCron("30 16 * * Thursday", async () => {
       isItBadLuckThursday = true
       ch.send(
         `E COMEEEEEÇA O THURSDAY UPPER CASE - SE NÃO FALAR GRITANDO VAI PERDER TEGA!!!!!!  ${EMOJIS.thidemo()}`
@@ -165,7 +165,7 @@ const COMMANDS = {
     const CHANCE = 5 * LUCKY_BALANCER * tegaRushMultiplier
     const RARE_CASE = 0.01 * LUCKY_BALANCER
 
-    if (msg.content.includes("qual minha tegaChance?")) {
+    if (msg.content.toUpperCase().includes("QUAL MINHA TEGACHANCE?")) {
       msg.reply(`Sua chance é de ${CHANCE.toFixed(3)}% ${EMOJIS.stonks()}`)
     }
 
@@ -236,7 +236,7 @@ const COMMANDS = {
     }
   },
   badLuckyTega: async (msg) => {
-    if (msg !== msg.toUpperCase() && isItBadLuckThursday) {
+    if (msg !== msg.content.toUpperCase() && isItBadLuckThursday) {
       try {
         const checkouter = await Checkouter.findOneAndUpdate(
           { discordId: msg.member.id },
