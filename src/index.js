@@ -116,7 +116,7 @@ const CRONS = {
   },
 
   startThursdayUpperCase: (ch) => {
-    createCron("30 16 * * Thursday", async () => {
+    createCron("33 16 * * Thursday", async () => {
       isItBadLuckThursday = true
       ch.send(
         `E COMEEEEEÇA O THURSDAY UPPER CASE - SE NÃO FALAR GRITANDO VAI PERDER TEGA!!!!!!  ${EMOJIS.thidemo()}`
@@ -236,7 +236,7 @@ const COMMANDS = {
     }
   },
   badLuckyTega: async (msg) => {
-    if (msg !== msg.content.toUpperCase() && isItBadLuckThursday) {
+    if (msg.content !== msg.content.toUpperCase() && isItBadLuckThursday) {
       try {
         const checkouter = await Checkouter.findOneAndUpdate(
           { discordId: msg.member.id },
