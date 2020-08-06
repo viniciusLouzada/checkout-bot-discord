@@ -116,7 +116,7 @@ const CRONS = {
   },
 
   startThursdayUpperCase: (ch) => {
-    createCron("35 10 * * Thursday", async () => {
+    createCron("0 11 * * Thursday", async () => {
       isItBadLuckThursday = true
       ch.send(
         `E COMEEEEEÇA O THURSDAY UPPER CASE - SE NÃO FALAR GRITANDO VAI PERDER TEGA!!!!!!  ${EMOJIS.thidemo()}`
@@ -125,7 +125,7 @@ const CRONS = {
   },
 
   finishThursdayUpperCase: (ch) => {
-    createCron("0 19 * * Thursday", async () => {
+    createCron("0 20 * * Thursday", async () => {
       isItBadLuckThursday = false
       ch.send(`ACABOU O THURSDAY UPPER CASE - CHOLA MAIS ${EMOJIS.stonks()}`)
     })
