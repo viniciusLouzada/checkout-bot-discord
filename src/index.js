@@ -96,7 +96,7 @@ const CRONS = {
     })
   },
   startFridayTegaRush: (ch) => {
-    createCron("30 10 * * Friday", async () => {
+    createCron("0 10 * * Friday", async () => {
       tegaRushMultiplier = 2
 
       ch.send(
@@ -116,7 +116,7 @@ const CRONS = {
   },
 
   startThursdayUpperCase: (ch) => {
-    createCron("33 16 * * Thursday", async () => {
+    createCron("35 10 * * Thursday", async () => {
       isItBadLuckThursday = true
       ch.send(
         `E COMEEEEEÇA O THURSDAY UPPER CASE - SE NÃO FALAR GRITANDO VAI PERDER TEGA!!!!!!  ${EMOJIS.thidemo()}`
